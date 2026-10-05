@@ -12,7 +12,7 @@
   "homepage": "https://github.com/sid0709/sid-ui#readme",
   "keywords": ["react", "design-system", "components", "ui"],
   "sideEffects": ["*.css"],
-  "files": ["src", "README.md"],
+  "files": ["src", "!src/**/*.test.ts", "README.md"],
   "types": "./src/components/index.ts",
   "main": "./src/components/index.ts",
   "exports": {
