@@ -1,0 +1,10 @@
+**/*.test.ts
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+tsconfig.json
+bun.lock
+.gitignore
+.npmignore
