@@ -5,7 +5,7 @@ React components, tokens, and theme for Joined products. Apps import this packag
 ## Install
 
 ```bash
-npm install sid-ui react react-dom
+bun add sid-ui react react-dom
 ```
 
 `react` and `react-dom` must be 19 or newer. The package also installs `@astryxdesign/core`, `@astryxdesign/theme-neutral`, and `@stylexjs/stylex`.
@@ -44,4 +44,12 @@ Token values are generated from `src/theme/joined.theme.ts`.
 
 ```bash
 bun run theme:build
+```
+
+## Publish
+
+From this repo, after `bun pm whoami` shows your registry user:
+
+```bash
+bun publish
 ```
