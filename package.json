@@ -1,6 +1,6 @@
 {
   "name": "sid-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "bun@1.4.2",
   "description": "React components, tokens, and theme used by Joined products.",
   "repository": {
@@ -13,7 +13,8 @@
   "homepage": "https://github.com/sid0709/sid-ui#readme",
   "keywords": ["react", "design-system", "components", "ui"],
   "sideEffects": ["*.css"],
-  "files": ["src", "!src/**/*.test.ts", "README.md"],
+  "workspaces": ["theme"],
+  "files": ["src", "!src/**/*.test.ts", "styles", "styles.css", "README.md"],
   "types": "./src/components/index.ts",
   "main": "./src/components/index.ts",
   "exports": {
@@ -21,12 +22,12 @@
     "./places": "./src/components/places.ts",
     "./geoapify": "./src/places/geoapify.ts",
     "./brand-name": "./src/brand/name.ts",
-    "./styles.css": "./src/styles/theme.css",
-    "./styles/astryx.css": "./src/styles/astryx.css",
-    "./styles/components.css": "./src/styles/components.css",
-    "./styles/joined.css": "./src/styles/joined.css",
-    "./styles/theme.css": "./src/styles/theme.css",
-    "./styles/tokens.css": "./src/styles/tokens.css",
+    "./styles.css": "./styles.css",
+    "./styles/astryx.css": "./styles/astryx.css",
+    "./styles/components.css": "./styles/components.css",
+    "./styles/joined.css": "./styles/joined.css",
+    "./styles/theme.css": "./styles/theme.css",
+    "./styles/tokens.css": "./styles/tokens.css",
     "./theme": "./src/theme/index.ts"
   },
   "peerDependencies": {
@@ -37,6 +38,8 @@
     "typecheck": "tsc --noEmit --incremental false -p tsconfig.json",
     "test": "bun test",
     "theme:build": "astryx theme build src/theme/joined.theme.ts -o src/theme/theme.css",
+    "dev:theme": "bun --filter sid-ui-theme dev",
+    "build:theme": "bun --filter sid-ui-theme build",
     "prepublishOnly": "bun run typecheck && bun test"
   },
   "dependencies": {

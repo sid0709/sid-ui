@@ -38,6 +38,17 @@ Next.js apps add `sid-ui` to `transpilePackages`, because the package ships Type
 | `sid-ui/geoapify` | Server helper for place search. Pass `process.env.GEOAPIFY_API_KEY`. |
 | `sid-ui/brand-name` | Product name constant, without the component barrel |
 
+## Catalog
+
+The component catalog is the `sid-ui-theme` app in `theme/`. It is a static site on GitHub Pages: https://sid0709.github.io/sid-ui/
+
+```bash
+bun run dev:theme
+bun run build:theme
+```
+
+Address autocomplete stays on the product apps. GitHub Pages cannot keep a Geoapify key on a server.
+
 ## Theme source
 
 Token values are generated from `src/theme/joined.theme.ts`.
