@@ -1,0 +1,71 @@
+/* Sideways scroll rows — filter chips, tab strips, kanban boards. The edge with
+   more content past it fades out, so a clipped item reads as "scroll for more"
+   instead of a cut-off label. Driven by the scroll position itself, so a row
+   that fits shows no fade. Browsers without scroll timelines keep a plain row. */
+
+@property --os-scroll-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --os-scroll-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@supports (animation-timeline: scroll()) {
+  .astryx-scrollable-area[data-axis="inline"] {
+    --os-scroll-fade-size: var(--spacing-10);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--os-scroll-fade-start),
+      black calc(100% - var(--os-scroll-fade-end)),
+      transparent
+    );
+    animation: os-scroll-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+
+  [dir="rtl"] .astryx-scrollable-area[data-axis="inline"] {
+    animation-name: os-scroll-fade-rtl;
+  }
+}
+
+/* Each edge reaches full fade within the first and last few percent of travel. */
+@keyframes os-scroll-fade {
+  0% {
+    --os-scroll-fade-start: 0px;
+    --os-scroll-fade-end: var(--os-scroll-fade-size);
+  }
+  8% {
+    --os-scroll-fade-start: var(--os-scroll-fade-size);
+  }
+  92% {
+    --os-scroll-fade-end: var(--os-scroll-fade-size);
+  }
+  100% {
+    --os-scroll-fade-start: var(--os-scroll-fade-size);
+    --os-scroll-fade-end: 0px;
+  }
+}
+
+/* Right-to-left rows start at the right edge, so the gradient's ends swap. */
+@keyframes os-scroll-fade-rtl {
+  0% {
+    --os-scroll-fade-end: 0px;
+    --os-scroll-fade-start: var(--os-scroll-fade-size);
+  }
+  8% {
+    --os-scroll-fade-end: var(--os-scroll-fade-size);
+  }
+  92% {
+    --os-scroll-fade-start: var(--os-scroll-fade-size);
+  }
+  100% {
+    --os-scroll-fade-end: var(--os-scroll-fade-size);
+    --os-scroll-fade-start: 0px;
+  }
+}

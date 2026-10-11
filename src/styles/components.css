@@ -18,6 +18,8 @@
 @import "./components/code-input.css";
 @import "./components/brand.css";
 @import "./components/google.css";
+@import "./components/scroll.css";
+@import "./components/consent.css";
 
 /* Input / Field */
 .os-field-group {
@@ -106,6 +108,16 @@
 
 .os-kanban-row > .os-kanban-cell:nth-child(4) {
   border-block-start-color: var(--color-error);
+}
+
+/* Columns settle on the board edge after a sideways scroll, so the last
+   visible column is whole or clearly past the fade, never sliced mid-card. */
+.os-kanban-scroller {
+  scroll-snap-type: inline proximity;
+}
+
+.os-kanban-row > .os-kanban-cell {
+  scroll-snap-align: start;
 }
 
 .os-kanban-cell [role="list"] {
@@ -328,6 +340,17 @@ button.os-star {
   height: var(--size-element-lg);
 }
 
+/* Disabled actions go neutral instead of a faded fill. Half-opacity accent read
+   as a lighter, still-clickable blue. A loading button keeps its color: it is
+   busy, not unavailable. */
+.astryx-button[data-variant="primary"]:is(:disabled, [aria-disabled="true"]):not(
+    [aria-busy="true"]
+  ) {
+  background-color: var(--color-neutral);
+  color: var(--color-text-disabled);
+  opacity: 1;
+}
+
 .astryx-button:has(> span > span:only-child svg) {
   padding-inline: 0;
   padding-block: 0;
@@ -362,6 +385,29 @@ button.os-star {
 .astryx-button-group[data-elevation="med"],
 .astryx-button-group[data-elevation="high"] {
   border-radius: var(--radius-full);
+}
+
+/* A text column beside other content shrinks before its siblings do. Without
+   this, a one-line truncated label (nowrap) holds the column at its full text
+   width and pushes the buttons next to it out of the card. */
+.astryx-stack[data-direction="horizontal"] > .astryx-stack[data-direction="vertical"] {
+  min-width: 0;
+}
+
+/* Rounded avatars hold logos. Every mark sits whole on the same light tile with
+   a hairline edge, so a transparent PNG, a full-bleed square, and a small file
+   all read as one set. Logos are drawn for light grounds, so the tile stays light
+   in dark mode too (the soft off-white of dark-mode text). Initials keep their fill. */
+.astryx-avatar[data-shape="rounded"]:has(img) {
+  background-color: light-dark(var(--color-background-surface), var(--color-text-primary));
+  outline: 1px solid var(--color-border);
+  outline-offset: -1px;
+}
+
+.astryx-avatar[data-shape="rounded"] img {
+  box-sizing: border-box;
+  padding: 8%;
+  object-fit: contain;
 }
 
 /* Pressed toggles stay outlined. A weak accent wash sits behind the accent

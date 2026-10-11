@@ -1,6 +1,6 @@
 {
   "name": "sid-ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packageManager": "bun@1.4.2",
   "description": "React components, tokens, and theme used by Joined products.",
   "repository": {
@@ -22,6 +22,7 @@
     "./places": "./src/components/places.ts",
     "./geoapify": "./src/places/geoapify.ts",
     "./brand-name": "./src/brand/name.ts",
+    "./browser-theme": "./src/brand/chrome.ts",
     "./styles.css": "./styles.css",
     "./styles/astryx.css": "./styles/astryx.css",
     "./styles/components.css": "./styles/components.css",

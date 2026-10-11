@@ -1,4 +1,5 @@
 export { BRAND_NAME } from "./name";
+export { BROWSER_THEME_COLOR } from "./chrome";
 export { JoinedLogo } from "./JoinedLogo";
 export type { JoinedLogoProps, JoinedLogoVariant } from "./JoinedLogo";
 export { JoinedMark } from "./JoinedMark";

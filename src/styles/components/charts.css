@@ -1,13 +1,13 @@
 /* SegmentBar — a proportion bar coloured from the theme's data tokens. */
 
-.os-segments {
+.os-segment-bar {
   display: flex;
   width: 100%;
   flex-direction: column;
   gap: var(--spacing-3);
 }
 
-.os-segment-track {
+.os-segment-bar-track {
   display: flex;
   width: 100%;
   gap: var(--spacing-0-5);
@@ -17,35 +17,35 @@
   background: var(--color-track);
 }
 
-.os-segment {
+.os-segment-bar-fill {
   min-width: var(--spacing-1);
   height: 100%;
   border-radius: var(--radius-full);
   transition: width var(--duration-slow) var(--ease-standard);
 }
 
-.os-segment[data-tone="blue"],
-.os-segment-key[data-tone="blue"] {
+.os-segment-bar-fill[data-tone="blue"],
+.os-segment-bar-key[data-tone="blue"] {
   background: var(--color-data-blue-3);
 }
-.os-segment[data-tone="green"],
-.os-segment-key[data-tone="green"] {
+.os-segment-bar-fill[data-tone="green"],
+.os-segment-bar-key[data-tone="green"] {
   background: var(--color-data-categorical-green);
 }
-.os-segment[data-tone="orange"],
-.os-segment-key[data-tone="orange"] {
+.os-segment-bar-fill[data-tone="orange"],
+.os-segment-bar-key[data-tone="orange"] {
   background: var(--color-data-categorical-orange);
 }
-.os-segment[data-tone="red"],
-.os-segment-key[data-tone="red"] {
+.os-segment-bar-fill[data-tone="red"],
+.os-segment-bar-key[data-tone="red"] {
   background: var(--color-data-categorical-red);
 }
-.os-segment[data-tone="neutral"],
-.os-segment-key[data-tone="neutral"] {
+.os-segment-bar-fill[data-tone="neutral"],
+.os-segment-bar-key[data-tone="neutral"] {
   background: var(--color-data-neutral);
 }
 
-.os-segment-legend {
+.os-segment-bar-legend {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-1) var(--spacing-4);
@@ -56,25 +56,25 @@
   font-size: var(--font-size-sm);
 }
 
-.os-segment-legend li {
+.os-segment-bar-legend li {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-1-5);
 }
 
-.os-segment-legend strong {
+.os-segment-bar-legend strong {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
 }
 
-.os-segment-key {
+.os-segment-bar-key {
   width: var(--spacing-2);
   height: var(--spacing-2);
   border-radius: var(--radius-full);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .os-segment {
+  .os-segment-bar-fill {
     transition: none;
   }
 }
@@ -111,8 +111,8 @@
 [data-tone="neutral"] {
   --os-chart-tone: var(--color-data-neutral);
 }
-.os-segment[data-tone="purple"],
-.os-segment-key[data-tone="purple"] {
+.os-segment-bar-fill[data-tone="purple"],
+.os-segment-bar-key[data-tone="purple"] {
   background: var(--color-data-categorical-purple);
 }
 

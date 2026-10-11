@@ -62,7 +62,7 @@ export default function AvatarDemo() {
       <Preview
         align="start"
         label="Shapes"
-        description="Circle for people; rounded or square for teams, companies, and bots."
+        description="Circle for people; rounded or square for teams, companies, and bots. A rounded image sits whole on a light tile with a hairline edge, so mixed company logos read as one set."
       >
         <Row>
           {SHAPES.map((shape) => (

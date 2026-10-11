@@ -35,13 +35,13 @@ export function SegmentBar({
     )
     .join(", ");
   return (
-    <div className="os-segments">
-      <div className="os-segment-track" role="img" aria-label={summary}>
+    <div className="os-segment-bar">
+      <div className="os-segment-bar-track" role="img" aria-label={summary}>
         {segments.map((segment, index) =>
           shares[index] ? (
             <span
               key={segment.label}
-              className="os-segment"
+              className="os-segment-bar-fill"
               data-tone={segment.tone ?? "blue"}
               style={{ width: `${shares[index]}%` }}
             />
@@ -49,10 +49,10 @@ export function SegmentBar({
         )}
       </div>
       {hasLegend ? (
-        <ul className="os-segment-legend">
+        <ul className="os-segment-bar-legend">
           {segments.map((segment) => (
             <li key={segment.label}>
-              <span className="os-segment-key" data-tone={segment.tone ?? "blue"} />
+              <span className="os-segment-bar-key" data-tone={segment.tone ?? "blue"} />
               <span>{segment.label}</span>
               <strong>{segment.display ?? segment.value}</strong>
             </li>

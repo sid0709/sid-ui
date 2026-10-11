@@ -191,5 +191,9 @@ export { compactNumber } from "./chartMath";
 // Mail — one line per message, for inboxes and reply feeds.
 export { MessageList } from "./MessageList";
 export type { MessageListItem } from "./MessageList";
+// Consent — a bottom-of-viewport question that waits for an answer (cookies, terms).
+export { ConsentBanner } from "./ConsentBanner";
+export type { ConsentBannerProps } from "./ConsentBanner";
+
 export { PageTabs } from "./PageTabs";
 export type { PageTab } from "./PageTabs";

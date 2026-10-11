@@ -385,7 +385,7 @@ export function KanbanBoard<T extends KanbanItemBase>({
   );
 
   return (
-    <ScrollableArea label={label} axis="inline">
+    <ScrollableArea label={label} axis="inline" className="os-kanban-scroller">
       <VisuallyHidden>
         <span id={hintId}>{KEY_HINT}</span>
         <span aria-live="polite">{announcement}</span>

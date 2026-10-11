@@ -346,7 +346,7 @@ export default function KanbanDemo() {
     <Examples>
       <Preview
         label="Sprint board"
-        description="Drag issues between columns, or focus one and press Space, then the arrow keys. WIP limits warn when a column is over."
+        description="Drag issues between columns, or focus one and press Space, then the arrow keys. WIP limits warn when a column is over. A board wider than its frame fades at the edge and snaps columns into place."
       >
         <Stack gap={4}>
           <HStack gap={4} vAlign="center" wrap="wrap" hAlign="between">

@@ -75,6 +75,7 @@ export const DEMO_COMPONENTS: Record<string, ComponentType> = {
   typeahead: dynamic(() => import("./typeahead"), { ssr: false, loading }),
   badge: dynamic(() => import("./badge"), { ssr: false, loading }),
   banner: dynamic(() => import("./banner"), { ssr: false, loading }),
+  "consent-banner": dynamic(() => import("./consent-banner"), { ssr: false, loading }),
   notification: dynamic(() => import("./notification"), { ssr: false, loading }),
   "progress-bar": dynamic(() => import("./progress-bar"), { ssr: false, loading }),
   skeleton: dynamic(() => import("./skeleton"), { ssr: false, loading }),

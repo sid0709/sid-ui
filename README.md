@@ -37,6 +37,7 @@ Next.js apps add `sid-ui` to `transpilePackages`, because the package ships Type
 | `sid-ui/places` | Place types and helpers |
 | `sid-ui/geoapify` | Server helper for place search. Pass `process.env.GEOAPIFY_API_KEY`. |
 | `sid-ui/brand-name` | Product name constant, without the component barrel |
+| `sid-ui/browser-theme` | `theme-color` values for the browser chrome, for server layouts |
 
 ## Catalog
 

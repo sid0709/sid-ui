@@ -159,7 +159,11 @@ export default function ButtonDemo() {
         </Stack>
       </Preview>
 
-      <Preview align="start" label="Disabled">
+      <Preview
+        align="start"
+        label="Disabled"
+        description="Unavailable primary actions go neutral, so they never pass for a lighter blue. Loading keeps its color."
+      >
         <Row>
           {VARIANTS.map((variant) => (
             <Button key={variant} label={variant} variant={variant} isDisabled />

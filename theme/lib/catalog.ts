@@ -213,7 +213,8 @@ export const CATALOG: CatalogGroup[] = [
       {
         slug: "scrollable-area",
         title: "Scrollable Area",
-        description: "Contained scrolling on one or both axes, for lists, rails, and wide tables.",
+        description:
+          "Contained scrolling on one or both axes, for lists, rails, and wide tables. Sideways rows fade at the clipped edge.",
         importName: "ScrollableArea",
       },
       {
@@ -505,6 +506,13 @@ export const CATALOG: CatalogGroup[] = [
         title: "Banner",
         description: "Page and section messages — dismissable, actionable, collapsible, elevated.",
         importName: "Banner",
+      },
+      {
+        slug: "consent-banner",
+        title: "Consent Banner",
+        description:
+          "One question that waits for an answer — cookies or new terms — at the bottom of the viewport.",
+        importName: "ConsentBanner",
       },
       {
         slug: "notification",

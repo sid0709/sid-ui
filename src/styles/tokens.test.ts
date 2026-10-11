@@ -43,3 +43,31 @@ describe("component styles", () => {
     });
   }
 });
+
+/**
+ * Every component sheet ships in one bundle, so a bare class rule in two files
+ * collides: SegmentBar's `.os-segments` once turned the date and time fields
+ * into a column. Each bare class belongs to one sheet; descendants may reuse it.
+ */
+describe("component class names", () => {
+  it("define each bare class in one sheet only", () => {
+    const dir = path.join(styles, "components");
+    const sheets = [
+      ["components.css", readFileSync(path.join(styles, "components.css"), "utf8")],
+      ...readdirSync(dir)
+        .filter((name) => name.endsWith(".css"))
+        .map((name) => [name, readFileSync(path.join(dir, name), "utf8")]),
+    ];
+    const owner = new Map<string, string>();
+    const clashes: string[] = [];
+    for (const [file, css] of sheets) {
+      const bare = new Set([...css.matchAll(/^(\.[a-z][\w-]*)\s*[{,]/gm)].map((match) => match[1]));
+      for (const name of bare) {
+        const first = owner.get(name);
+        if (first && first !== file) clashes.push(`${name}: ${first}, ${file}`);
+        else owner.set(name, file);
+      }
+    }
+    expect(clashes).toEqual([]);
+  });
+});

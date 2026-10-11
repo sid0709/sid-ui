@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { JoinedLogo } from "./JoinedLogo";
 import { JoinedMark } from "./JoinedMark";
 
@@ -11,14 +13,20 @@ export interface BrandFooterProps {
   href?: string;
   align?: "center" | "start";
   className?: string;
+  /** More footer content on its own line under the sign-off, such as legal links. */
+  children?: ReactNode;
 }
 
-/** A quiet sign-off under landing, auth, and error pages: the symbol, a lead, and the wordmark. */
+/**
+ * A quiet sign-off under landing, auth, and error pages: the symbol, a lead, and the
+ * wordmark. It is the page's footer landmark, so put the legal links inside it.
+ */
 export function BrandFooter({
   lead = "Part of",
   href,
   align = "center",
   className,
+  children,
 }: BrandFooterProps) {
   const classes = ["os-brand-footer", align === "start" && "os-brand-footer-start", className]
     .filter(Boolean)
@@ -40,6 +48,7 @@ export function BrandFooter({
       ) : (
         <span className="os-brand-footer-link">{signOff}</span>
       )}
+      {children && <div className="os-brand-footer-extra">{children}</div>}
     </footer>
   );
 }

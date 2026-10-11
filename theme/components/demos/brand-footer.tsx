@@ -1,6 +1,6 @@
 "use client";
 
-import { BrandFooter, Stack } from "sid-ui";
+import { BrandFooter, HStack, Link, Stack } from "sid-ui";
 
 import { Examples, Preview } from "./shared";
 
@@ -19,6 +19,19 @@ export default function BrandFooterDemo() {
           <BrandFooter lead="Joined Admin is part of" />
           <BrandFooter lead="Scoutwell is part of" href="#" />
         </Stack>
+      </Preview>
+
+      <Preview
+        label="With legal links"
+        description="The footer is the page's landmark, so terms and privacy go inside it, on their own line."
+      >
+        <BrandFooter lead="©">
+          <HStack gap={3} wrap="wrap">
+            <Link href="#terms">Terms</Link>
+            <Link href="#privacy">Privacy</Link>
+            <Link href="#cookies">Cookies</Link>
+          </HStack>
+        </BrandFooter>
       </Preview>
 
       <Preview label="Start-aligned" description="Under a left-aligned page.">

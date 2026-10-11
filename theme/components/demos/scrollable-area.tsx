@@ -98,7 +98,7 @@ export default function ScrollableAreaDemo() {
 
       <Preview
         label="Horizontal"
-        description="A card rail that scrolls sideways — swipe on touch, shift-scroll on desktop."
+        description="A card rail that scrolls sideways — swipe on touch, shift-scroll on desktop. The edge with more past it fades, so a clipped card reads as more to see."
       >
         <ScrollableArea label="Rooms" axis="inline" padding={1}>
           <HStack gap={3}>

@@ -1,0 +1,85 @@
+/* ConsentBanner — a card-width question at the bottom of the viewport.
+   Above page content, below dialogs and notifications. */
+
+.os-consent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  box-sizing: border-box;
+  padding: var(--spacing-5);
+  background: var(--color-background-popover);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-container);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    var(--shadow-high);
+}
+
+.os-consent-fixed {
+  position: fixed;
+  z-index: 400;
+  inset-inline: var(--spacing-4);
+  bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom));
+  max-width: var(--os-consent-width, 560px);
+  animation: os-consent-in var(--duration-slow) var(--ease-standard);
+}
+
+.os-consent-body {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.os-consent-title {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--text-label-leading);
+}
+
+.os-consent-description {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.os-consent-link {
+  font-size: var(--font-size-sm);
+}
+
+.os-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+/* Phones: an edge-to-edge sheet with full-width choices. */
+@media (max-width: 480px) {
+  .os-consent-fixed {
+    inset-inline: var(--spacing-2);
+    bottom: calc(var(--spacing-2) + env(safe-area-inset-bottom));
+  }
+  .os-consent-actions {
+    flex: 1 1 100%;
+  }
+  .os-consent-actions > * {
+    flex: 1 1 0;
+  }
+}
+
+@keyframes os-consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-4));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .os-consent-fixed {
+    animation: none;
+  }
+}
