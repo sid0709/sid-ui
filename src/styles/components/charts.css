@@ -657,3 +657,66 @@
     transition: none;
   }
 }
+
+/* ── UptimeBar ────────────────────────────────────────────────────── */
+
+.os-uptime {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.os-uptime-days {
+  display: flex;
+  height: var(--spacing-8);
+  gap: var(--spacing-0-5);
+}
+
+.os-uptime-day {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: var(--radius-inner);
+  background: var(--color-data-categorical-green);
+  outline: none;
+}
+.os-uptime-day[data-tone="degraded"] {
+  background: var(--color-data-categorical-orange);
+}
+.os-uptime-day[data-tone="down"] {
+  background: var(--color-data-categorical-red);
+}
+.os-uptime-day[data-tone="none"] {
+  background: var(--color-background-muted);
+}
+.os-uptime-day:hover,
+.os-uptime-day:focus-visible {
+  box-shadow: 0 0 0 var(--spacing-0-5) var(--color-border-emphasized);
+}
+
+/* The tip sits above the hovered day, pulled inward at either end of the row. */
+.os-uptime-day .os-chart-tip {
+  inset: auto auto calc(100% + var(--spacing-2)) 50%;
+  transform: translateX(-50%);
+}
+.os-uptime-day .os-chart-tip[data-align="start"] {
+  left: 0;
+  transform: none;
+}
+.os-uptime-day .os-chart-tip[data-align="end"] {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+.os-uptime-axis {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacing-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+.os-uptime-axis span:last-child {
+  text-align: end;
+}

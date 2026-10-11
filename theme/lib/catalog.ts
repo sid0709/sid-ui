@@ -772,6 +772,19 @@ export const CATALOG: CatalogGroup[] = [
         usage: `<HeatmapCalendar label="Applications per day" unit="applications" days={[{ date: "2026-09-01", value: 3 }]} />`,
       },
       {
+        slug: "uptime-bar",
+        title: "Uptime Bar",
+        description: "A status-page history: one bar per day, coloured by how the day went.",
+        importName: "UptimeBar",
+        usage: `<UptimeBar
+  label="API uptime, last 90 days"
+  startLabel="90 days ago"
+  endLabel="Today"
+  summary="99.98% uptime"
+  days={[{ label: "Oct 11, 2026", tone: "up", details: ["100% uptime"] }]}
+/>`,
+      },
+      {
         slug: "sparkline",
         title: "Sparkline",
         description: "A small axis-free trend that sits under a KPI number.",

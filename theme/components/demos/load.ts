@@ -112,6 +112,7 @@ export const DEMO_COMPONENTS: Record<string, ComponentType> = {
   "funnel-chart": dynamic(() => import("./funnel-chart"), { ssr: false, loading }),
   "heatmap-calendar": dynamic(() => import("./heatmap-calendar"), { ssr: false, loading }),
   sparkline: dynamic(() => import("./sparkline"), { ssr: false, loading }),
+  "uptime-bar": dynamic(() => import("./uptime-bar"), { ssr: false, loading }),
   chat: dynamic(() => import("./chat"), { ssr: false, loading }),
   "visually-hidden": dynamic(() => import("./visually-hidden"), { ssr: false, loading }),
 };

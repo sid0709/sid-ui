@@ -184,6 +184,8 @@ export { FunnelChart } from "./FunnelChart";
 export type { FunnelStage } from "./FunnelChart";
 export { HeatmapCalendar } from "./HeatmapCalendar";
 export type { HeatmapDay } from "./HeatmapCalendar";
+export { UptimeBar } from "./UptimeBar";
+export type { UptimeDay, UptimeTone } from "./UptimeBar";
 export { ChartLegend, CHART_TONES } from "./chartParts";
 export type { ChartTone, LegendItem } from "./chartParts";
 export { compactNumber } from "./chartMath";
