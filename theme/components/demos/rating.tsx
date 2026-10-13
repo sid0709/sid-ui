@@ -36,6 +36,9 @@ const BIDDERS = [
 
 export default function RatingDemo() {
   const [score, setScore] = useState(4);
+  const [half, setHalf] = useState(3.5);
+  const [love, setLove] = useState(4);
+  const [likes, setLikes] = useState<Record<string, number>>({ Lighting: 3, Composition: 5, Story: 0 });
   const [ten, setTen] = useState(7);
   const [criteria, setCriteria] = useState<Record<string, number>>({
     Communication: 5,
@@ -49,8 +52,60 @@ export default function RatingDemo() {
 
   return (
     <Examples>
-      <Preview label="Interactive">
-        <Rating value={score} onChange={setScore} caption={CAPTIONS[score]} />
+      <Preview label="Interactive" description="Hover to preview, click to pick — the chosen star pops. Arrow keys work too.">
+        <Rating value={score} onChange={setScore} caption={CAPTIONS[score]} size="lg" />
+      </Preview>
+      <Preview
+        label="Hearts"
+        description='icon="heart" for likes and favorites. A pick beats like a heart.'
+      >
+        <Stack gap={3}>
+          <Rating
+            icon="heart"
+            value={love}
+            onChange={setLove}
+            label="How much did you love it?"
+            size="lg"
+            caption={["", "Meh", "Liked it", "Really liked it", "Loved it", "Obsessed"][love]}
+          />
+          <Card maxWidth={420}>
+            <Stack gap={2}>
+              <Text weight="semibold">Rate this photo</Text>
+              {Object.keys(likes).map((k) => (
+                <HStack key={k} hAlign="between" vAlign="center">
+                  <Text>{k}</Text>
+                  <Rating
+                    icon="heart"
+                    value={likes[k]}
+                    onChange={(v) => setLikes((all) => ({ ...all, [k]: v }))}
+                    label={k}
+                    size="sm"
+                    showValue={false}
+                  />
+                </HStack>
+              ))}
+            </Stack>
+          </Card>
+        </Stack>
+      </Preview>
+      <Preview
+        label="Half steps"
+        description="allowHalf picks a half on the left side of a mark; arrow keys step by halves."
+      >
+        <Stack gap={3}>
+          <Rating value={half} onChange={setHalf} allowHalf size="lg" label="Half-star rating" />
+          <Rating icon="heart" value={2.5} readOnly allowHalf label="Half hearts" />
+        </Stack>
+      </Preview>
+      <Preview
+        label="Fractional scores"
+        description="Read-only values fill part of a mark, so an average of 4.3 looks like 4.3."
+      >
+        <Stack gap={2}>
+          {[4.8, 4.3, 3.7, 2.2].map((v) => (
+            <Rating key={v} value={v} readOnly label="Average rating" />
+          ))}
+        </Stack>
       </Preview>
       <Preview label="Read only">
         <Stack gap={3}>
@@ -78,7 +133,7 @@ export default function RatingDemo() {
             <Stack gap={1} hAlign="center">
               <Text type="display-2">{AVERAGE.toFixed(1)}</Text>
               <Rating
-                value={Math.round(AVERAGE)}
+                value={Number(AVERAGE.toFixed(1))}
                 readOnly
                 size="sm"
                 showValue={false}

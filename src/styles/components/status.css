@@ -1,0 +1,117 @@
+/* StatusIndicator — a dot with its words, plain or in a pill. */
+
+.os-status {
+  --os-status-color: var(--color-accent);
+  --os-status-dot: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  max-width: 100%;
+  font-size: var(--font-size-base);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.os-status-success {
+  --os-status-color: var(--color-data-categorical-green);
+}
+.os-status-warning {
+  --os-status-color: var(--color-data-categorical-orange);
+}
+.os-status-error {
+  --os-status-color: var(--color-data-categorical-red);
+}
+.os-status-neutral {
+  --os-status-color: var(--color-data-neutral);
+}
+
+.os-status-sm {
+  --os-status-dot: 6px;
+  gap: var(--spacing-1-5);
+  font-size: var(--font-size-sm);
+}
+
+.os-status-lg {
+  --os-status-dot: 10px;
+  gap: var(--spacing-2-5, var(--spacing-2));
+  font-size: var(--font-size-lg);
+}
+
+.os-status-dot {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--os-status-dot);
+  height: var(--os-status-dot);
+  border-radius: var(--radius-full);
+  background: var(--os-status-color);
+}
+
+.os-status-pulsing .os-status-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--os-status-color);
+  animation: os-status-ripple 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes os-status-ripple {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .os-status-pulsing .os-status-dot::after {
+    animation: none;
+    opacity: 0.25;
+    transform: scale(2);
+  }
+}
+
+.os-status-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.os-status-detail {
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.os-status-detail::before {
+  content: "·";
+  margin-inline-end: var(--spacing-2);
+  opacity: 0.6;
+}
+
+/* Pills */
+.os-status-soft,
+.os-status-outline {
+  padding: var(--spacing-1) var(--spacing-3) var(--spacing-1) var(--spacing-2-5, var(--spacing-2));
+  border-radius: var(--radius-full);
+}
+
+.os-status-soft.os-status-sm,
+.os-status-outline.os-status-sm {
+  padding: 2px var(--spacing-2) 2px var(--spacing-1-5);
+}
+
+.os-status-soft.os-status-lg,
+.os-status-outline.os-status-lg {
+  padding: var(--spacing-1-5) var(--spacing-4) var(--spacing-1-5) var(--spacing-3);
+}
+
+.os-status-soft {
+  background: color-mix(in srgb, var(--os-status-color) 13%, transparent);
+}
+
+.os-status-outline {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--os-status-color) 45%, var(--color-border));
+}

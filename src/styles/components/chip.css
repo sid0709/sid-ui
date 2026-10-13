@@ -1,0 +1,343 @@
+/* Chip — a compact, rounded label. soft, filled, or outlined in ten colors; selected chips take
+   the accent and grow a check; removed chips collapse before they leave. */
+
+.os-chip {
+  --_h: 2rem;
+  --_pad: 0.75rem;
+  --_font: 0.875rem;
+  --_bg: color-mix(in srgb, var(--color-text-primary) 7%, transparent);
+  --_fg: var(--color-text-primary);
+  --_icon: var(--color-icon-secondary, var(--color-text-secondary));
+  --_line: transparent;
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  vertical-align: middle;
+  max-width: 100%;
+  transition:
+    grid-template-columns 0.18s var(--ease-standard),
+    opacity 0.18s var(--ease-standard),
+    transform 0.18s var(--ease-standard);
+  animation: os-chip-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.os-chip-sm {
+  --_h: 1.625rem;
+  --_pad: 0.625rem;
+  --_font: 0.78rem;
+}
+
+.os-chip-lg {
+  --_h: 2.375rem;
+  --_pad: 1rem;
+  --_font: 0.9375rem;
+}
+
+.os-chip-inner {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  height: var(--_h);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--_bg);
+  color: var(--_fg);
+  box-shadow: inset 0 0 0 1px var(--_line);
+  white-space: nowrap;
+  transition:
+    background-color 0.15s var(--ease-standard),
+    color 0.15s var(--ease-standard),
+    box-shadow 0.15s var(--ease-standard),
+    transform 0.15s var(--ease-standard);
+}
+
+.os-chip-main {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--_pad);
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--_font);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  text-decoration: none;
+}
+
+button.os-chip-main,
+a.os-chip-main {
+  cursor: pointer;
+}
+
+.os-chip:has(button.os-chip-main:hover, a.os-chip-main:hover) .os-chip-inner {
+  background: color-mix(in srgb, var(--_bg), var(--_fg) 9%);
+}
+
+.os-chip:has(button.os-chip-main:active, a.os-chip-main:active) .os-chip-inner {
+  transform: scale(0.96);
+}
+
+.os-chip-main:focus-visible,
+.os-chip-remove:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.os-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.os-chip-start {
+  display: inline-flex;
+  align-items: center;
+  margin-inline: -0.125rem 0.375rem;
+  color: var(--_icon);
+}
+
+.os-chip-start > svg,
+.os-chip-start > span:has(> svg) {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* An avatar tucks into the curve. */
+.os-chip-start:has(img, [role="img"]) {
+  margin-inline-start: calc(-1 * var(--_pad) + 0.25rem);
+}
+
+.os-chip-count {
+  margin-inline-start: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, currentColor 13%, transparent);
+  font-size: 0.72em;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* The check grows in from zero width when the chip is selected. */
+.os-chip-check {
+  display: grid;
+  grid-template-columns: 0fr;
+  margin-inline-start: -0.125rem;
+  transition: grid-template-columns 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.os-chip-check > span {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.os-chip-check svg {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  margin-inline-end: 0.3rem;
+  stroke-width: 2.6;
+  transform: scale(0.4);
+  opacity: 0;
+  transition:
+    transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.15s;
+}
+
+.os-chip-selected .os-chip-check {
+  grid-template-columns: 1fr;
+}
+
+.os-chip-selected .os-chip-check svg {
+  transform: none;
+  opacity: 1;
+}
+
+/* Remove */
+.os-chip-removable .os-chip-main {
+  padding-inline-end: 0.25rem;
+}
+
+.os-chip-remove {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: calc(var(--_h) - 0.625rem);
+  height: calc(var(--_h) - 0.625rem);
+  margin-inline-end: 0.3125rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+  opacity: 0.65;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    opacity 0.15s;
+}
+
+.os-chip-remove svg {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.os-chip-remove:hover {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.os-chip-leaving {
+  grid-template-columns: 0fr;
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
+
+.os-chip-disabled {
+  opacity: 0.45;
+}
+
+.os-chip-disabled .os-chip-main,
+.os-chip-disabled .os-chip-remove {
+  cursor: not-allowed;
+}
+
+/* ---------- Colors ---------- */
+
+.os-chip-blue {
+  --_c-bg: var(--color-background-blue);
+  --_c-fg: var(--color-text-blue);
+  --_c-icon: var(--color-icon-blue);
+  --_c-line: var(--color-border-blue);
+}
+.os-chip-green {
+  --_c-bg: var(--color-background-green);
+  --_c-fg: var(--color-text-green);
+  --_c-icon: var(--color-icon-green);
+  --_c-line: var(--color-border-green);
+}
+.os-chip-yellow {
+  --_c-bg: var(--color-background-yellow);
+  --_c-fg: var(--color-text-yellow);
+  --_c-icon: var(--color-icon-yellow);
+  --_c-line: var(--color-border-yellow);
+}
+.os-chip-red {
+  --_c-bg: var(--color-background-red);
+  --_c-fg: var(--color-text-red);
+  --_c-icon: var(--color-icon-red);
+  --_c-line: var(--color-border-red);
+}
+.os-chip-purple {
+  --_c-bg: var(--color-background-purple);
+  --_c-fg: var(--color-text-purple);
+  --_c-icon: var(--color-icon-purple);
+  --_c-line: var(--color-border-purple);
+}
+.os-chip-pink {
+  --_c-bg: var(--color-background-pink);
+  --_c-fg: var(--color-text-pink);
+  --_c-icon: var(--color-icon-pink);
+  --_c-line: var(--color-border-pink);
+}
+.os-chip-teal {
+  --_c-bg: var(--color-background-teal);
+  --_c-fg: var(--color-text-teal);
+  --_c-icon: var(--color-icon-teal);
+  --_c-line: var(--color-border-teal);
+}
+.os-chip-orange {
+  --_c-bg: var(--color-background-orange);
+  --_c-fg: var(--color-text-orange);
+  --_c-icon: var(--color-icon-orange);
+  --_c-line: var(--color-border-orange);
+}
+.os-chip-cyan {
+  --_c-bg: var(--color-background-cyan);
+  --_c-fg: var(--color-text-cyan);
+  --_c-icon: var(--color-icon-cyan);
+  --_c-line: var(--color-border-cyan);
+}
+
+.os-chip:not(.os-chip-neutral).os-chip-filled {
+  --_bg: var(--_c-bg);
+  --_fg: var(--_c-fg);
+  --_icon: var(--_c-icon);
+}
+
+.os-chip:not(.os-chip-neutral).os-chip-soft {
+  --_bg: color-mix(in srgb, var(--_c-bg) 34%, transparent);
+  --_fg: var(--_c-fg);
+  --_icon: var(--_c-icon);
+}
+
+.os-chip-neutral.os-chip-filled {
+  --_bg: color-mix(in srgb, var(--color-text-primary) 11%, transparent);
+}
+
+.os-chip-outlined {
+  --_bg: var(--color-background-surface);
+  --_line: color-mix(in srgb, var(--color-text-primary) 18%, transparent);
+}
+
+.os-chip:not(.os-chip-neutral).os-chip-outlined {
+  --_line: var(--_c-line);
+  --_icon: var(--_c-icon);
+}
+
+/* Selected beats color: the accent says “on”. */
+.os-chip.os-chip-selected {
+  --_bg: var(--color-accent-muted);
+  --_fg: var(--color-accent);
+  --_icon: var(--color-accent);
+  --_line: color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+/* ---------- Group ---------- */
+
+.os-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.os-chip-group-scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: 2px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+  padding-inline: 12px 24px;
+  margin-inline: -12px;
+}
+
+.os-chip-group-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.os-chip-group-scroll > .os-chip {
+  flex-shrink: 0;
+}
+
+@keyframes os-chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .os-chip,
+  .os-chip-inner,
+  .os-chip-check,
+  .os-chip-check svg {
+    transition: none;
+    animation: none;
+  }
+}

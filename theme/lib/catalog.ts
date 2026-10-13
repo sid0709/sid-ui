@@ -328,6 +328,22 @@ export const CATALOG: CatalogGroup[] = [
         importName: "Timestamp",
       },
       {
+        slug: "chip",
+        title: "Chip",
+        description:
+          "Filter, input, suggestion, and people chips — ten colors, three variants, single or multiple selection, and a collapse on remove.",
+        importName: "Chip, ChipGroup",
+        usage: `<ChipGroup label="Job type" selectionMode="multiple" value={types} onChange={setTypes}>
+  <Chip value="full-time" label="Full-time" count={12} />
+  <Chip value="contract" label="Contract" count={8} />
+</ChipGroup>
+
+<Chip label="Figma" variant="outlined" onRemove={() => remove("Figma")} />
+<Chip label="Alex Rivera" start={<Avatar name="Alex Rivera" size="xsm" />} />
+<Chip label="Summarize" start={<Icon icon={icons.sparkle} />} onClick={run} />
+<Chip label="Urgent" color="red" variant="filled" />`,
+      },
+      {
         slug: "token",
         title: "Token",
         description:
@@ -344,8 +360,16 @@ export const CATALOG: CatalogGroup[] = [
         slug: "card",
         title: "Card",
         description:
-          "Variants, elevation, and padding — plus clickable, selectable, stat, profile, and room cards.",
-        importName: "Card",
+          "Spotlight, tilt, and lift motion cards, flip and expandable cards, a live dashboard card, a deck, and loading states — plus variants, clickable, selectable, and room cards.",
+        importName: "Card, MotionCard, FlipCard, ExpandableCard",
+        usage: `<MotionCard effect="spotlight">…</MotionCard>
+<MotionCard effect="tilt" maxTilt={12}>…</MotionCard>
+
+<FlipCard height={180} front={<Question />} back={<Answer />} />
+
+<ExpandableCard header={<Text weight="semibold">How long does a room stay open?</Text>}>
+  <Text>You pick — from 24 hours to two weeks.</Text>
+</ExpandableCard>`,
       },
       {
         slug: "carousel",
@@ -382,7 +406,8 @@ export const CATALOG: CatalogGroup[] = [
       {
         slug: "code-input",
         title: "Code Input",
-        description: "One round cell per digit — paste, backspace, and success and error motion.",
+        description:
+          "Clean cells where each digit spins up like a phone’s scroll wheel — paste, backspace, PINs, and success and error motion.",
         importName: "CodeInput",
       },
       {
@@ -425,7 +450,12 @@ export const CATALOG: CatalogGroup[] = [
       {
         slug: "rating",
         title: "Rating",
-        description: "A star score, from read-only to a ten-mark scale.",
+        description:
+          "Gold stars or rose hearts — hover preview, a pop on pick, half steps, fractional averages, and keyboard support.",
+        usage: `<Rating value={score} onChange={setScore} caption="Great" />
+<Rating icon="heart" value={love} onChange={setLove} />
+<Rating value={3.5} onChange={setHalf} allowHalf />
+<Rating value={4.3} readOnly />`,
         importName: "Rating",
       },
       {
@@ -517,8 +547,32 @@ export const CATALOG: CatalogGroup[] = [
       {
         slug: "notification",
         title: "Notification",
-        description: "An inbox row, plus useNotification to show a message at any corner.",
-        importName: "Notification",
+        description:
+          "Inbox rows with event badges, previews, inline actions, and day groups — plus useNotification cards with actions and a pausable timer.",
+        importName: "Notification, NotificationList, NotificationGroup, NotificationIcon, useNotification",
+        usage: `<NotificationList label="Inbox" empty={<Text>You’re all caught up</Text>}>
+  <NotificationGroup label="Today">
+    <Notification
+      unread
+      start={<Avatar name="Alex Rivera" />}
+      badge={<Icon icon={icons.tag} />}
+      title="Alex Rivera submitted a bid"
+      preview={<Text weight="semibold">$2,400</Text>}
+      actions={<Button label="Review" size="sm" variant="primary" />}
+      time="2m"
+      onClick={markRead}
+      onDismiss={dismiss}
+    />
+  </NotificationGroup>
+</NotificationList>
+
+// A card at a corner. Hover pauses the timer.
+const notify = useNotification();
+notify({
+  title: "Conversation archived",
+  tone: "neutral",
+  actions: [{ label: "Undo", onClick: restore }],
+});`,
       },
       {
         slug: "progress-bar",
@@ -541,8 +595,14 @@ export const CATALOG: CatalogGroup[] = [
       {
         slug: "status-dot",
         title: "Status Dot",
-        description: "Labeled dots for presence, services, and legends — pulsing when live.",
-        importName: "StatusDot",
+        description:
+          "Labeled dots for presence, services, pipelines, and legends — plus StatusIndicator, the dot with its words in three sizes and pill styles.",
+        importName: "StatusDot, StatusIndicator",
+        usage: `<StatusDot variant="success" label="Online" isPulsing />
+
+<StatusIndicator variant="success" label="Operational" detail="99.98%" />
+<StatusIndicator variant="error" label="Live" appearance="soft" size="sm" isPulsing />
+<StatusIndicator variant="neutral" label="Queued" appearance="outline" />`,
       },
       {
         slug: "toast",
@@ -728,7 +788,7 @@ export const CATALOG: CatalogGroup[] = [
         slug: "trend-chart",
         title: "Trend Chart",
         description:
-          "Change over time for up to four series — 2px lines, a light wash, and a crosshair that reads every series.",
+          "Change over time for up to four series — smooth lines that draw themselves in, a gradient wash, and a crosshair that reads every series.",
         importName: "TrendChart",
         usage: `<TrendChart
   label="Applications and replies per week"
@@ -763,6 +823,63 @@ export const CATALOG: CatalogGroup[] = [
           "Stages that narrow, each drawn against the first, with step-to-step conversion.",
         importName: "FunnelChart",
         usage: `<FunnelChart label="Pipeline" stages={[{ label: "Applied", value: 64 }, { label: "Replied", value: 18 }]} />`,
+      },
+      {
+        slug: "radar-chart",
+        title: "Radar Chart",
+        description:
+          "Several measures of a few things at once — polygon or round webs, hover or arrow through axes, shapes that spring in.",
+        importName: "RadarChart",
+        usage: `<RadarChart
+  label="Bidder scores"
+  axes={["Communication", "Craft", "Speed", "Value", "Reliability"]}
+  max={10}
+  series={[
+    { label: "Alex Rivera", values: [9, 8, 6, 7, 9] },
+    { label: "Dana Kim", values: [7, 9, 8, 5, 7] },
+  ]}
+/>`,
+      },
+      {
+        slug: "scatter-chart",
+        title: "Scatter Chart",
+        description:
+          "Two measures against each other, or bubbles for a third — nearest-point readout, guides, and mean-line quadrants.",
+        importName: "ScatterChart",
+        usage: `<ScatterChart
+  label="Price against rating"
+  xLabel="Bid price"
+  yLabel="Rating"
+  hasMeanLines
+  series={[{ label: "Design", points: [{ x: 2400, y: 4.6 }, { x: 1800, y: 4.1 }] }]}
+/>`,
+      },
+      {
+        slug: "radial-bar-chart",
+        title: "Radial Bar Chart",
+        description: "Progress toward goals as nested activity rings, or one measure as a gauge.",
+        importName: "RadialBarChart",
+        usage: `<RadialBarChart
+  label="This week's goals"
+  data={[
+    { label: "Bids sent", value: 14, max: 20 },
+    { label: "Replies", value: 9, max: 15 },
+  ]}
+/>
+<RadialBarChart variant="gauge" label="Profile" data={[{ label: "Complete", value: 72, max: 100 }]} />`,
+      },
+      {
+        slug: "treemap",
+        title: "Treemap",
+        description: "Part of a whole for many items — squarified tiles, grouped by color, with hover readouts.",
+        importName: "Treemap",
+        usage: `<Treemap
+  label="Budget by line"
+  data={[
+    { label: "Brand refresh", value: 24000, group: "Design" },
+    { label: "Website rebuild", value: 31000, group: "Engineering" },
+  ]}
+/>`,
       },
       {
         slug: "heatmap-calendar",

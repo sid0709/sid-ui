@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 
 import { segmentShares } from "./chartMath";
 import { ChartTable, ChartTip, defaultFormat, type ChartTone } from "./chartParts";
@@ -84,7 +84,7 @@ export function BarChart({
                 <span
                   className="os-bars-mark"
                   data-tone={datum.tone ?? tone}
-                  style={{ height: size(datum.value) }}
+                  style={{ height: size(datum.value), "--os-bar-i": index } as CSSProperties}
                 />
                 {active === index ? tip(index) : null}
               </div>
@@ -107,7 +107,7 @@ export function BarChart({
                 <span
                   className="os-bars-mark"
                   data-tone={datum.tone ?? tone}
-                  style={{ width: size(datum.value) }}
+                  style={{ width: size(datum.value), "--os-bar-i": index } as CSSProperties}
                 />
                 {active === index ? tip(index) : null}
               </span>

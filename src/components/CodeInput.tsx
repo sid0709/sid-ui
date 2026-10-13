@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  useEffect,
   useId,
   useRef,
+  useState,
   type ClipboardEvent,
   type ChangeEvent,
   type CSSProperties,
@@ -41,7 +43,74 @@ export interface CodeInputProps {
   size?: ControlSize;
 }
 
-/** One round cell per character. Typing, pasting, backspace, and arrow keys move between cells. */
+const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+/** Base spin time plus a little per digit travelled, so 0→9 takes longer than 0→1. */
+const ROLL_BASE_MS = 520;
+const ROLL_PER_STEP_MS = 55;
+
+/**
+ * The visible face of a cell. A digit is a drum of 0–9 that spins from where it was (0 for a new
+ * digit) to the typed one and settles with a little overshoot; a letter drops in.
+ */
+function CodeFace({ character, delay }: { character: string; delay: number }) {
+  const digit = /^[0-9]$/.test(character) ? Number(character) : null;
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const from = useRef(0);
+
+  useEffect(() => {
+    if (digit === null) return;
+    // Two frames: the drum paints at its start before the transition runs.
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => {
+        setDuration(ROLL_BASE_MS + Math.abs(digit - from.current) * ROLL_PER_STEP_MS);
+        setPosition(digit);
+        from.current = digit;
+      });
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [digit]);
+
+  if (!character) return null;
+
+  if (digit === null) {
+    return (
+      <span className="os-code-face" aria-hidden>
+        <span className="os-code-letter" style={{ animationDelay: `${delay}ms` }}>
+          {character}
+        </span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="os-code-face os-code-face-drum" aria-hidden>
+      <span
+        className="os-code-drum"
+        style={
+          {
+            "--os-code-roll": position,
+            transitionDuration: `${duration}ms`,
+            transitionDelay: `${delay}ms`,
+          } as CSSProperties
+        }
+      >
+        {DIGITS.map((d) => (
+          <span key={d} className="os-code-digit">
+            {d}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+/** One cell per character. Typing, pasting, backspace, and arrow keys move between cells. */
 export function CodeInput({
   value,
   onChange,
@@ -61,6 +130,14 @@ export function CodeInput({
   // Focus moves before React re-renders, so handlers read the newest value from here.
   const latest = useRef(value);
   latest.current = value;
+  // When several cells change at once (a paste, a reset), their drums start one after another.
+  const [seen, setSeen] = useState(value);
+  const [isBatch, setIsBatch] = useState(false);
+  if (seen !== value) {
+    const changed = Array.from({ length }, (_, i) => seen[i] !== value[i]).filter(Boolean).length;
+    setSeen(value);
+    setIsBatch(changed > 1);
+  }
 
   const focusCell = (index: number) => {
     const cell = cells.current[Math.max(0, Math.min(index, length - 1))];
@@ -146,6 +223,11 @@ export function CodeInput({
               data-filled={character ? "true" : "false"}
               style={{ "--os-code-index": index } as CSSProperties}
             >
+              <CodeFace
+                key={character ? "filled" : "empty"}
+                character={character}
+                delay={isBatch ? index * 70 : 0}
+              />
               <input
                 ref={(node) => {
                   cells.current[index] = node;

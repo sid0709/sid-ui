@@ -9,6 +9,29 @@ import { Caption, Examples, Preview } from "./shared";
 const DEMO_CODE = "123456";
 const CHECK_DELAY_MS = 600;
 
+function randomCode(length: number) {
+  return Array.from({ length }, () => Math.floor(Math.random() * 10)).join("");
+}
+
+function Roller() {
+  const [code, setCode] = useState("482916");
+  return (
+    <Stack gap={3}>
+      <CodeInput label="Rolling code" isLabelHidden size="lg" value={code} onChange={setCode} />
+      <HStack gap={2} vAlign="center">
+        <Button
+          label="Roll a new code"
+          variant="primary"
+          size="sm"
+          onClick={() => setCode(randomCode(6))}
+        />
+        <Button label="Clear" size="sm" variant="ghost" onClick={() => setCode("")} />
+        <Caption>Each drum spins from its old digit to the new one and settles.</Caption>
+      </HStack>
+    </Stack>
+  );
+}
+
 export default function CodeInputDemo() {
   const [code, setCode] = useState("");
   const [status, setStatus] = useState<CodeInputStatus>("default");
@@ -32,8 +55,15 @@ export default function CodeInputDemo() {
   return (
     <Examples>
       <Preview
+        label="Rolling digits"
+        description="A typed digit spins up from 0 like a phone’s scroll wheel. Changing one rolls from the old value; a paste staggers across the cells."
+        align="start"
+      >
+        <Roller />
+      </Preview>
+      <Preview
         label="Verify an email"
-        description={`Type ${DEMO_CODE} for the green ripple, anything else to shake. Paste works too.`}
+        description={`Type ${DEMO_CODE} for the green hop, anything else to shake. Paste works too.`}
         align="start"
       >
         <Stack gap={3}>

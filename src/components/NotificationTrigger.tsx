@@ -12,12 +12,20 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import { Glyph } from "./Glyph";
+import { Button } from "./Action";
+import { Glyph, type GlyphName } from "./Glyph";
 
 import type { NotificationTone } from "./Notification";
 
 /** Where a triggered notification sits. Logical start/end mirror under RTL. */
 export type NotificationPosition = "topStart" | "topEnd" | "bottomStart" | "bottomEnd";
+
+/** A button on a triggered notification. Clicking it runs `onClick`, then dismisses. */
+export interface NotificationAction {
+  label: string;
+  onClick: () => void;
+  variant?: "primary" | "secondary" | "ghost";
+}
 
 export interface ShowNotificationOptions {
   title: ReactNode;
@@ -25,13 +33,28 @@ export interface ShowNotificationOptions {
   tone?: NotificationTone;
   /** Corner of the viewport. */
   position?: NotificationPosition;
-  /** How long it stays. 0 keeps it until dismissed. */
+  /** How long it stays. 0 keeps it until dismissed. Hovering or focusing the card pauses it. */
   duration?: number;
+  /** Leading visual in place of the tone icon — an avatar or a thumbnail. */
+  start?: ReactNode;
+  /** Replaces the tone's default icon. */
+  icon?: ReactNode;
+  /** Up to two buttons under the copy, such as Undo or View. */
+  actions?: NotificationAction[];
+  /** Draws the time left as a bar along the bottom edge. Defaults to true when it times out. */
+  showProgress?: boolean;
 }
 
 export type NotificationDismiss = () => void;
 
 const POSITIONS: NotificationPosition[] = ["topStart", "topEnd", "bottomStart", "bottomEnd"];
+const TONE_GLYPH: Record<NotificationTone, GlyphName> = {
+  accent: "info",
+  success: "check",
+  warning: "alert",
+  danger: "alertCircle",
+  neutral: "bell",
+};
 const DEFAULT_DURATION_MS = 5000;
 const DEFAULT_POSITION: NotificationPosition = "topEnd";
 /** Matches --duration-slow, so the card finishes its exit before it unmounts. */
@@ -44,6 +67,10 @@ interface Notice {
   tone: NotificationTone;
   position: NotificationPosition;
   duration: number;
+  start?: ReactNode;
+  icon?: ReactNode;
+  actions: NotificationAction[];
+  showProgress: boolean;
   leaving: boolean;
 }
 
@@ -91,6 +118,10 @@ export function NotificationViewport({ children }: { children: ReactNode }) {
         tone: options.tone ?? "accent",
         position: options.position ?? DEFAULT_POSITION,
         duration: options.duration ?? DEFAULT_DURATION_MS,
+        start: options.start,
+        icon: options.icon,
+        actions: (options.actions ?? []).slice(0, 2),
+        showProgress: options.showProgress ?? true,
         leaving: false,
       };
       setItems((all) => [notice, ...all]);
@@ -208,12 +239,7 @@ function NotificationCard({
   onRemove: () => void;
 }) {
   const titleId = useId();
-
-  useEffect(() => {
-    if (item.duration === 0 || item.leaving) return;
-    const timer = window.setTimeout(onDismiss, item.duration);
-    return () => window.clearTimeout(timer);
-  }, [item.duration, item.leaving, onDismiss]);
+  const timed = item.duration > 0;
 
   useEffect(() => {
     if (!item.leaving) return;
@@ -230,7 +256,13 @@ function NotificationCard({
         role={item.tone === "danger" ? "alert" : "status"}
         aria-labelledby={titleId}
       >
-        <span className="os-note-card-mark" aria-hidden />
+        {item.start != null ? (
+          <span className="os-note-card-start">{item.start}</span>
+        ) : (
+          <span className="os-note-card-icon" aria-hidden>
+            {item.icon ?? <Glyph name={TONE_GLYPH[item.tone]} />}
+          </span>
+        )}
         <span className="os-note-card-copy">
           <span className="os-note-card-title" id={titleId}>
             {item.title}
@@ -238,10 +270,40 @@ function NotificationCard({
           {item.description != null && (
             <span className="os-note-card-description">{item.description}</span>
           )}
+          {item.actions.length > 0 && (
+            <span className="os-note-card-actions">
+              {item.actions.map((action, index) => (
+                <Button
+                  key={action.label}
+                  label={action.label}
+                  size="sm"
+                  variant={action.variant ?? (index === 0 ? "secondary" : "ghost")}
+                  onClick={() => {
+                    action.onClick();
+                    onDismiss();
+                  }}
+                />
+              ))}
+            </span>
+          )}
         </span>
         <button type="button" className="os-note-dismiss" aria-label="Dismiss" onClick={onDismiss}>
           <Glyph name="close" />
         </button>
+        {/* The bar is the timer: it pauses with the card on hover or focus, and its end dismisses. */}
+        {timed && !item.leaving && (
+          <span
+            className={[
+              "os-note-card-progress",
+              !item.showProgress && "os-note-card-progress-hidden",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            style={{ animationDuration: `${item.duration}ms` }}
+            onAnimationEnd={onDismiss}
+            aria-hidden
+          />
+        )}
       </div>
     </div>
   );

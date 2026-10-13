@@ -1,8 +1,16 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useId, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
-import { areaPath, linePath, linearScale, nearestIndex, niceTicks } from "./chartMath";
+import {
+  areaPath,
+  linePath,
+  linearScale,
+  nearestIndex,
+  niceTicks,
+  smoothAreaPath,
+  smoothPath,
+} from "./chartMath";
 import {
   ChartLegend,
   ChartTable,
@@ -27,8 +35,9 @@ const X_LABEL_ROOM = 64;
 const TIP_GAP = 12;
 
 /**
- * Change over time for up to four series on one axis. Lines are 2px with a 10% wash in
- * `area`; a crosshair snaps to the nearest point and reads out every series at once.
+ * Change over time for up to four series on one axis. Lines are 2px — smooth by default —
+ * with a gradient wash in `area`, and draw themselves in on first paint. A crosshair snaps to
+ * the nearest point and reads out every series at once.
  * Arrow keys move the readout for keyboard users; a hidden table carries every value.
  */
 export function TrendChart({
@@ -36,6 +45,7 @@ export function TrendChart({
   series,
   label,
   variant = "area",
+  curve = "smooth",
   height = DEFAULT_HEIGHT,
   formatValue = defaultFormat,
   hasLegend,
@@ -46,6 +56,8 @@ export function TrendChart({
   /** Accessible name for the chart. */
   label: string;
   variant?: "area" | "line";
+  /** smooth bends through each point without overshooting it; linear joins them straight. */
+  curve?: "smooth" | "linear";
   height?: number;
   formatValue?: (value: number) => string;
   /** Defaults to on for two or more series; one series is named by its card title. */
@@ -53,6 +65,10 @@ export function TrendChart({
 }) {
   const frame = useRef<HTMLDivElement>(null);
   const width = useElementWidth(frame);
+  // useId can contain colons, which url(#…) references do not tolerate.
+  const gradientId = `os-trend-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const line = curve === "smooth" ? smoothPath : linePath;
+  const area = curve === "smooth" ? smoothAreaPath : areaPath;
   const [active, setActive] = useState<number | null>(null);
 
   const plotW = Math.max(0, width - MARGIN.left - MARGIN.right);
@@ -141,14 +157,32 @@ export function TrendChart({
                 </text>
               ) : null,
             )}
-            {toned.map((item) => {
+            {toned.map((item, seriesIndex) => {
               const points = item.values.map((value, index) => ({ x: xs[index], y: y(value) }));
+              const fill = `${gradientId}-${seriesIndex}`;
               return (
                 <g key={item.label} data-tone={item.tone}>
                   {variant === "area" ? (
-                    <path className="os-chart-area" d={areaPath(points, y(0))} />
+                    <>
+                      <defs>
+                        <linearGradient id={fill} x1="0" x2="0" y1="0" y2="1">
+                          <stop className="os-chart-stop-top" offset="0%" />
+                          <stop className="os-chart-stop-bottom" offset="100%" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        className="os-chart-area"
+                        d={area(points, y(0))}
+                        fill={`url(#${fill})`}
+                      />
+                    </>
                   ) : null}
-                  <path className="os-chart-line" d={linePath(points)} />
+                  <path
+                    className="os-chart-line"
+                    d={line(points)}
+                    pathLength={1}
+                    style={{ animationDelay: `${seriesIndex * 120}ms` }}
+                  />
                 </g>
               );
             })}
@@ -162,14 +196,20 @@ export function TrendChart({
                   y2={MARGIN.top + plotH}
                 />
                 {toned.map((item) => (
-                  <circle
-                    key={item.label}
-                    className="os-chart-dot"
-                    data-tone={item.tone}
-                    cx={activeX}
-                    cy={y(item.values[active] ?? 0)}
-                    r={4}
-                  />
+                  <g key={item.label} data-tone={item.tone}>
+                    <circle
+                      className="os-chart-halo"
+                      cx={activeX}
+                      cy={y(item.values[active] ?? 0)}
+                      r={9}
+                    />
+                    <circle
+                      className="os-chart-dot"
+                      cx={activeX}
+                      cy={y(item.values[active] ?? 0)}
+                      r={4.5}
+                    />
+                  </g>
                 ))}
               </g>
             ) : null}

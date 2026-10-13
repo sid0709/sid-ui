@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import { arcPath, segmentShares } from "./chartMath";
 import { ChartTable, defaultFormat, toneAt, type ChartTone } from "./chartParts";
@@ -36,6 +36,7 @@ export function DonutChart({
   formatValue?: (value: number) => string;
 }) {
   const [active, setActive] = useState<number | null>(null);
+  const maskId = `os-donut-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const shares = segmentShares(data.map((slice) => slice.value));
   const total = data.reduce((sum, slice) => sum + Math.max(0, slice.value), 0);
   const outer = size / 2;
@@ -62,7 +63,20 @@ export function DonutChart({
   return (
     <div className="os-donut">
       <div className="os-donut-figure" style={{ width: size, height: size }}>
-        <svg width={size} height={size} aria-hidden>
+        <svg width={size} height={size} aria-hidden overflow="visible">
+          <defs>
+            <mask id={maskId}>
+              <circle
+                className="os-donut-sweep"
+                cx={outer}
+                cy={outer}
+                r={outer / 2 + inner / 2}
+                strokeWidth={outer - inner + 12}
+                pathLength={1}
+                transform={`rotate(-90 ${outer} ${outer})`}
+              />
+            </mask>
+          </defs>
           <circle
             className="os-donut-track"
             cx={outer}
@@ -70,19 +84,22 @@ export function DonutChart({
             r={(outer + inner) / 2}
             strokeWidth={outer - inner}
           />
-          {arcs.map(({ slice, index, d }) =>
-            d ? (
-              <path
-                key={slice.label}
-                d={d}
-                className="os-donut-slice"
-                data-tone={slice.tone}
-                data-dim={active !== null && active !== index ? true : undefined}
-                onPointerEnter={() => setActive(index)}
-                onPointerLeave={() => setActive(null)}
-              />
-            ) : null,
-          )}
+          <g mask={`url(#${maskId})`}>
+            {arcs.map(({ slice, index, d }) =>
+              d ? (
+                <path
+                  key={slice.label}
+                  d={d}
+                  className="os-donut-slice"
+                  data-tone={slice.tone}
+                  data-dim={active !== null && active !== index ? true : undefined}
+                  data-active={active === index || undefined}
+                  onPointerEnter={() => setActive(index)}
+                  onPointerLeave={() => setActive(null)}
+                />
+              ) : null,
+            )}
+          </g>
         </svg>
         <div className="os-donut-center" aria-live="polite">
           <strong>{formatValue(focus ? focus.value : total)}</strong>

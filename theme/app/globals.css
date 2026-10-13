@@ -16,3 +16,56 @@ body {
   transform: translateZ(0);
   overflow: hidden;
 }
+
+/* Card demo: a deck stacked in depth. The top card flies off left or right. */
+.demo-deck {
+  position: relative;
+  display: grid;
+  width: 260px;
+  min-height: 190px;
+}
+
+.demo-deck > * {
+  grid-area: 1 / 1;
+}
+
+.demo-deck-card {
+  position: relative;
+  z-index: 3;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.32s ease;
+}
+
+.demo-deck-card[data-depth="1"] {
+  z-index: 2;
+  transform: translateY(14px) scale(0.95);
+  opacity: 0.85;
+}
+
+.demo-deck-card[data-depth="2"] {
+  z-index: 1;
+  transform: translateY(28px) scale(0.9);
+  opacity: 0.6;
+}
+
+.demo-deck-card[data-leaving="left"] {
+  transform: translateX(-130%) rotate(-14deg);
+  opacity: 0;
+}
+
+.demo-deck-card[data-leaving="right"] {
+  transform: translateX(130%) rotate(14deg);
+  opacity: 0;
+}
+
+.demo-fade-in {
+  animation: demo-fade-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes demo-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

@@ -21,6 +21,15 @@ import {
 } from "sid-ui";
 import { useState } from "react";
 
+import {
+  CardDeck,
+  ExpandableCards,
+  FlipCards,
+  LiveCard,
+  LoadingCard,
+  SpotlightCards,
+  TiltCard,
+} from "./card-dynamic";
 import { Caption, Examples, PEOPLE, Preview, Row, SAMPLE_IMAGES } from "./shared";
 
 const VARIANTS: CardVariant[] = [
@@ -100,6 +109,14 @@ export default function CardDemo() {
 
   return (
     <Examples>
+      <SpotlightCards />
+      <TiltCard />
+      <LiveCard />
+      <FlipCards />
+      <CardDeck />
+      <ExpandableCards />
+      <LoadingCard />
+
       <Preview
         align="start"
         label="Variants"

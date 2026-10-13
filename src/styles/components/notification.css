@@ -27,100 +27,200 @@
 }
 
 .os-note {
+  position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .os-note:last-child {
   border-bottom: 0;
 }
 
+.os-note-interactive:hover {
+  background: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+}
+
+.os-note-unread {
+  background: color-mix(in srgb, var(--color-accent) 4%, transparent);
+}
+
 .os-note-main {
   flex: 1;
   min-width: 0;
-  display: grid;
-  grid-template-columns: 10px auto minmax(0, 1fr) auto;
-  column-gap: var(--spacing-3);
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
   padding: var(--spacing-3) var(--spacing-2);
-  color: inherit;
-  text-decoration: none;
   text-align: start;
-  background: transparent;
-  border: 0;
-  font: inherit;
-  cursor: default;
 }
 
-a.os-note-main,
-button.os-note-main {
+/* The title's link or button stretches over the whole row; the row's own
+   buttons (actions, action, dismiss) sit above it and stay clickable. */
+.os-note-hit {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: none;
   cursor: pointer;
 }
 
-a.os-note-main:hover,
-button.os-note-main:hover {
-  background: var(--surface-hover);
+.os-note-hit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
-.os-note-main:focus-visible {
+.os-note-hit:focus-visible {
+  outline: none;
+}
+
+.os-note-hit:focus-visible::after {
   outline: 2px solid var(--color-accent);
   outline-offset: -2px;
+}
+
+.os-note-actions,
+.os-note-action,
+.os-note-dismiss {
+  position: relative;
+  z-index: 1;
 }
 
 .os-note-unread .os-note-title {
   font-weight: var(--font-weight-semibold);
 }
 
+/* Centered on the title's first line. */
 .os-note-mark {
+  flex-shrink: 0;
   width: 8px;
   height: 8px;
+  margin-top: calc((1.3em - 8px) / 2 + 1px);
+  margin-inline: 1px;
   border-radius: var(--radius-full);
-  justify-self: center;
   background: transparent;
 }
 
 .os-note-unread .os-note-mark {
   background: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .os-note-tone-success.os-note-mark {
-  background: var(--color-success);
+  background: var(--color-data-categorical-green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-data-categorical-green) 18%, transparent);
 }
 .os-note-tone-warning.os-note-mark {
-  background: var(--color-warning);
+  background: var(--color-data-categorical-orange);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-data-categorical-orange) 22%, transparent);
 }
 .os-note-tone-danger.os-note-mark {
-  background: var(--color-error);
+  background: var(--color-data-categorical-red);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-data-categorical-red) 18%, transparent);
 }
 .os-note-tone-neutral.os-note-mark {
   background: var(--color-text-secondary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-secondary) 18%, transparent);
 }
 
 .os-note:not(.os-note-unread) .os-note-mark {
   background: transparent;
+  box-shadow: none;
 }
 
 .os-note-start {
+  position: relative;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
 }
 
-.os-note-main:has(.os-note-start-empty) {
-  grid-template-columns: 10px minmax(0, 1fr) auto;
+/* The event-type chip on the avatar's corner. */
+.os-note-badge {
+  position: absolute;
+  inset-inline-end: -5px;
+  bottom: -4px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 11px;
+  box-shadow: 0 0 0 2px var(--color-background-surface);
 }
 
-.os-note-start-empty {
-  display: none;
+.os-note-badge > * {
+  width: 11px;
+  height: 11px;
+}
+
+.os-note-badge-success {
+  background: var(--color-data-categorical-green);
+}
+.os-note-badge-warning {
+  background: var(--color-data-categorical-orange);
+}
+.os-note-badge-danger {
+  background: var(--color-data-categorical-red);
+}
+.os-note-badge-neutral {
+  background: var(--color-text-secondary);
+}
+
+/* System events: a tinted round icon in place of an avatar. Tag token pairs
+   keep the glyph readable on its tint in both themes. */
+.os-note-icon,
+.os-note-card-icon {
+  --os-note-tile-bg: var(--color-accent-muted);
+  --os-note-tile-fg: var(--color-accent);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background: var(--os-note-tile-bg);
+  color: var(--os-note-tile-fg);
+  font-size: 1rem;
+}
+
+.os-note-icon-success,
+.os-note-card-success .os-note-card-icon {
+  --os-note-tile-bg: var(--color-background-green);
+  --os-note-tile-fg: var(--color-icon-green);
+}
+.os-note-icon-warning,
+.os-note-card-warning .os-note-card-icon {
+  --os-note-tile-bg: var(--color-background-yellow);
+  --os-note-tile-fg: var(--color-icon-yellow);
+}
+.os-note-icon-danger,
+.os-note-card-danger .os-note-card-icon {
+  --os-note-tile-bg: var(--color-background-red);
+  --os-note-tile-fg: var(--color-icon-red);
+}
+.os-note-icon-neutral,
+.os-note-card-neutral .os-note-card-icon {
+  --os-note-tile-bg: var(--color-background-gray);
+  --os-note-tile-fg: var(--color-icon-gray);
 }
 
 .os-note-action {
   display: flex;
   align-items: center;
+  align-self: center;
   padding-inline-end: var(--spacing-2);
 }
 
 .os-note-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-0-5);
@@ -147,16 +247,70 @@ button.os-note-main:hover {
 }
 
 .os-note-time {
+  flex-shrink: 0;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  padding-inline-start: var(--spacing-3);
+  padding-inline-start: var(--spacing-2);
+  line-height: calc(var(--font-size-base) * 1.3);
+}
+
+/* Rich detail: a quoted comment, a file, an amount. */
+.os-note-preview {
+  display: block;
+  margin-top: var(--spacing-1-5);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-element);
+  background: var(--color-background-body);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+  color: var(--color-text-primary);
+}
+
+.os-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+}
+
+/* Day sections. */
+.os-note-group {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.os-note-group:last-child {
+  border-bottom: 0;
+}
+
+.os-note-group > .os-notes-list > .os-note {
+  border-bottom: 0;
+}
+
+.os-note-group-label {
+  padding: var(--spacing-3) var(--spacing-2) var(--spacing-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+.os-notes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-8) var(--spacing-4);
+  color: var(--color-text-secondary);
+  text-align: center;
 }
 
 .os-note-dismiss {
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
+  align-self: flex-start;
+  margin-top: var(--spacing-2);
   width: var(--control-height);
   height: var(--control-height);
   margin-inline-end: var(--spacing-1);
@@ -169,7 +323,7 @@ button.os-note-main:hover {
 }
 
 .os-note-dismiss:hover {
-  background: var(--surface-hover);
+  background: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
   color: var(--color-icon-primary);
 }
 
@@ -295,26 +449,67 @@ button.os-note-main:hover {
   }
 }
 
-.os-note-card-mark {
-  width: var(--spacing-2);
-  height: var(--spacing-2);
-  margin-top: var(--spacing-1);
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  flex-shrink: 0;
+.os-note-card {
+  --os-note-tone: var(--color-accent);
+  position: relative;
 }
 
-.os-note-card-success .os-note-card-mark {
-  background: var(--color-success);
+.os-note-card-success {
+  --os-note-tone: var(--color-data-categorical-green);
 }
-.os-note-card-warning .os-note-card-mark {
-  background: var(--color-warning);
+.os-note-card-warning {
+  --os-note-tone: var(--color-data-categorical-orange);
 }
-.os-note-card-danger .os-note-card-mark {
-  background: var(--color-error);
+.os-note-card-danger {
+  --os-note-tone: var(--color-data-categorical-red);
 }
-.os-note-card-neutral .os-note-card-mark {
-  background: var(--color-text-secondary);
+.os-note-card-neutral {
+  --os-note-tone: var(--color-text-secondary);
+}
+
+.os-note-card-start {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.os-note-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+}
+
+/* Time left. Paused while the card is hovered or holds focus. */
+.os-note-card-progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--os-note-tone);
+  opacity: 0.55;
+  transform-origin: left;
+  animation-name: os-note-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+[dir="rtl"] .os-note-card-progress {
+  transform-origin: right;
+}
+
+.os-note-card:hover .os-note-card-progress,
+.os-note-card:focus-within .os-note-card-progress {
+  animation-play-state: paused;
+}
+
+.os-note-card-progress-hidden {
+  visibility: hidden;
+}
+
+@keyframes os-note-countdown {
+  to {
+    transform: scaleX(0);
+  }
 }
 
 .os-note-card-copy {

@@ -11,6 +11,9 @@
 @import "./components/calendar.css";
 @import "./components/responsive.css";
 @import "./components/notification.css";
+@import "./components/status.css";
+@import "./components/chip.css";
+@import "./components/card-effects.css";
 @import "./components/sticky.css";
 @import "./components/charts.css";
 @import "./components/message-list.css";
@@ -201,35 +204,117 @@
 }
 
 /* Rating */
+/* Rating — gold stars or rose hearts. Each mark is an outline with a clipped fill on top, so
+   fractional scores fill part of a mark. Hover previews, a pick pops. */
 .os-rating {
+  --_mark: 22px;
+  --_on: #f5a524;
+  --_off: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);
 }
-.os-rating-stars {
+.os-rating-heart {
+  --_on: #f43f5e;
+}
+.os-rating-sm {
+  --_mark: 16px;
+}
+.os-rating-lg {
+  --_mark: 32px;
+}
+.os-rating-marks {
   display: inline-flex;
-  gap: 2px;
+  gap: calc(var(--_mark) * 0.12);
 }
-.os-star {
-  border: 0;
-  background: transparent;
-  color: var(--color-border-emphasized, var(--color-border));
-  font-size: 20px;
-  line-height: 1;
+.os-rating-mark {
+  position: relative;
+  display: inline-grid;
+  width: var(--_mark);
+  height: var(--_mark);
   padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
   cursor: default;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-button.os-star {
+button.os-rating-mark {
   cursor: pointer;
 }
-.os-star-on {
-  color: var(--color-warning);
+button.os-rating-mark:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
-.os-rating-sm .os-star {
-  font-size: 14px;
+.os-rating-mark svg {
+  display: block;
+  width: var(--_mark);
+  height: var(--_mark);
 }
-.os-rating-lg .os-star {
-  font-size: 28px;
+.os-rating-mark-base {
+  fill: var(--_off);
+}
+.os-rating-mark-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  transition: width 0.2s var(--ease-standard);
+}
+[dir="rtl"] .os-rating-mark-fill {
+  inset: 0 0 0 auto;
+  direction: rtl;
+}
+.os-rating-mark-fill svg {
+  fill: var(--_on);
+  filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--_on) 35%, transparent));
+}
+/* Hovered marks grow a touch; the picked one pops. */
+.os-rating-mark-preview {
+  transform: scale(1.12);
+}
+.os-rating-mark-inner {
+  position: relative;
+  display: inline-grid;
+}
+.os-rating-mark-pop .os-rating-mark-inner {
+  animation: os-rating-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.os-rating-heart .os-rating-mark-pop .os-rating-mark-inner {
+  animation-name: os-rating-beat;
+}
+@keyframes os-rating-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35) rotate(-8deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes os-rating-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.35);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .os-rating-mark,
+  .os-rating-mark-inner,
+  .os-rating-mark-fill {
+    transition: none;
+    animation: none !important;
+  }
 }
 .os-rating-value {
   font-size: var(--font-size-sm, 0.75rem);

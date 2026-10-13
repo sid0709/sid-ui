@@ -1,25 +1,12 @@
 "use client";
 
-import {
-  AppShell,
-  BRAND_NAME,
-  BrandHeading,
-  Button,
-  Icon,
-  JoinedMark,
-  SideNav,
-  SideNavHeading,
-  SideNavItem,
-  TextInput,
-  TopNav,
-  TopNavItem,
-} from "sid-ui";
+import { AppShell, BrandHeading, Button, TopNav, TopNavItem } from "sid-ui";
 import { usePathname } from "next/navigation";
-import { useMemo, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
+import { CatalogNav } from "@/components/CatalogNav";
 import { ClientOnly } from "@/components/ClientOnly";
 import { useColorMode } from "@/components/Providers";
-import { CATALOG, itemHref } from "@/lib/catalog";
 
 function pagePath(path: string) {
   return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
@@ -28,19 +15,6 @@ function pagePath(path: string) {
 export function DocsChrome({ children }: { children: ReactNode }) {
   const path = pagePath(usePathname() ?? "/");
   const { mode, setMode } = useColorMode();
-  const [query, setQuery] = useState("");
-
-  const groups = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return CATALOG;
-    return CATALOG.map((group) => ({
-      ...group,
-      items: group.items.filter(
-        (item) =>
-          item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q),
-      ),
-    })).filter((group) => group.items.length > 0);
-  }, [query]);
 
   return (
     <AppShell
@@ -71,49 +45,7 @@ export function DocsChrome({ children }: { children: ReactNode }) {
       }
       sideNav={
         <ClientOnly>
-          <SideNav
-            header={
-              <SideNavHeading icon={<JoinedMark label="" />} heading={BRAND_NAME} headingHref="/" />
-            }
-            topContent={
-              <TextInput
-                label="Search"
-                isLabelHidden
-                placeholder="Search"
-                startIcon={<Icon icon="search" />}
-                value={query}
-                onChange={(value) => setQuery(value)}
-                hasClear
-              />
-            }
-          >
-            <SideNavItem
-              label="Overview"
-              href="/"
-              isSelected={path === "/"}
-              icon={<Icon icon="viewColumns" />}
-            />
-            {groups.map((group) => (
-              <SideNavItem
-                key={group.category}
-                label={group.category}
-                icon={<Icon icon={group.icon} />}
-                collapsible
-              >
-                {group.items.map((item) => {
-                  const href = itemHref(item.slug);
-                  return (
-                    <SideNavItem
-                      key={item.slug}
-                      label={item.title}
-                      href={href}
-                      isSelected={path === href}
-                    />
-                  );
-                })}
-              </SideNavItem>
-            ))}
-          </SideNav>
+          <CatalogNav path={path} />
         </ClientOnly>
       }
     >

@@ -122,12 +122,42 @@ export { useFileDrop, formatBytes, matchesAccept } from "./useFileDrop";
 export type { UseFileDropOptions, FileDropProps } from "./useFileDrop";
 
 export { Rating, RATING_MAX } from "./Rating";
-export type { RatingProps } from "./Rating";
+export type { RatingProps, RatingIcon } from "./Rating";
 
-export { Notification, NotificationList } from "./Notification";
-export type { NotificationProps, NotificationListProps, NotificationTone } from "./Notification";
+export { MotionCard, FlipCard, ExpandableCard } from "./CardEffects";
+export type {
+  MotionCardProps,
+  MotionCardEffect,
+  FlipCardProps,
+  ExpandableCardProps,
+} from "./CardEffects";
+
+export { Chip, ChipGroup } from "./Chip";
+export type { ChipProps, ChipGroupProps, ChipColor, ChipVariant, ChipSize } from "./Chip";
+
+export { StatusIndicator } from "./StatusIndicator";
+export type {
+  StatusIndicatorProps,
+  StatusIndicatorSize,
+  StatusIndicatorAppearance,
+} from "./StatusIndicator";
+
+export {
+  Notification,
+  NotificationGroup,
+  NotificationIcon,
+  NotificationList,
+} from "./Notification";
+export type {
+  NotificationProps,
+  NotificationGroupProps,
+  NotificationIconProps,
+  NotificationListProps,
+  NotificationTone,
+} from "./Notification";
 export { NotificationViewport, useNotification } from "./NotificationTrigger";
 export type {
+  NotificationAction,
   NotificationPosition,
   ShowNotificationOptions,
   NotificationDismiss,
@@ -179,6 +209,14 @@ export { BarChart } from "./BarChart";
 export type { BarDatum } from "./BarChart";
 export { DonutChart } from "./DonutChart";
 export type { DonutSlice } from "./DonutChart";
+export { RadarChart } from "./RadarChart";
+export type { RadarSeries } from "./RadarChart";
+export { ScatterChart } from "./ScatterChart";
+export type { ScatterPoint, ScatterSeries } from "./ScatterChart";
+export { RadialBarChart } from "./RadialBarChart";
+export type { RadialBarDatum } from "./RadialBarChart";
+export { Treemap } from "./Treemap";
+export type { TreemapDatum } from "./Treemap";
 export { Sparkline } from "./Sparkline";
 export { FunnelChart } from "./FunnelChart";
 export type { FunnelStage } from "./FunnelChart";
