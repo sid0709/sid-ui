@@ -237,7 +237,11 @@ export function ScatterChart({
           <ChartTip
             title={focus.label ?? toned[active.s].label}
             left={focusX + (tipAlign === "start" ? 14 : tipAlign === "end" ? -14 : 0)}
-            top={Math.max(0, focusY - r(focus.size) - 64)}
+            top={
+              focusY < MARGIN.top + plotH / 2
+                ? focusY + r(focus.size) + 12
+                : Math.max(0, focusY - r(focus.size) - (focus.size != null ? 92 : 76))
+            }
             align={tipAlign}
             rows={[
               { label: xLabel, value: formatX(focus.x), tone: toned[active.s].tone },

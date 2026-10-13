@@ -20,7 +20,7 @@ export type RadarSeries = {
   tone?: ChartTone;
 };
 
-const DEFAULT_SIZE = 340;
+const DEFAULT_SIZE = 420;
 /** Room around the web for axis names. */
 const LABEL_ROOM = 64;
 
